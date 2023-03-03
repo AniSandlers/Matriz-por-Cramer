@@ -1,0 +1,64 @@
+#Supongo que tengo un sistema de ecuciones de 4x4 que sería este:
+#2x+3y+z-w = 4
+#x-2y+2z = -2
+#3x-z+w = 3
+#-x+y+3z-2w = 1
+
+#Debo representar esto en Python de la siguiente manera
+matrix = [[2, 3, 1, -1],
+          [1, -2, 2, 0],
+          [3, 0, -1, 1],
+          [-1, 1, 3, -2]]
+#Aqui pongo las soluciones de la ecuacion
+solutions = [4, -2, 3, 1]
+
+
+#Aquí es donde pongo mi codigo de Carmer
+def cramer(matrix, solutions):
+    # Determinante de la matriz principal
+    det_main = det(matrix)
+    
+    # Lista para almacenar las soluciones
+    result = []
+    
+    # Iterar sobre las columnas
+    for i in range(len(matrix)):
+        # Copiar la matriz original
+        temp_matrix = matrix.copy()
+        
+        # Reemplazar la columna actual con el vector de soluciones
+        for j in range(len(matrix)):
+            temp_matrix[j][i] = solutions[j]
+        
+        # Calcular el determinante de la matriz modificada
+        det_temp = det(temp_matrix)
+        
+        # Agregar la solución a la lista
+        result.append(det_temp / det_main)
+    
+    return result
+
+    #Utilizo una funcion "det" para la resolucion de la matriz
+def det(matrix):
+    # Cao para una matriz de 2x2 donde La función det calcula el determinante de una matriz de forma recursiva.
+    #Utilizo la fórmula de la regla de Sarrus para calcular el determinante.
+    if len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    
+    # Aquí calculo el determinante recursivamente utilizando cofactores.
+    determinant = 0
+    for i in range(len(matrix)):
+        sign = (-1) ** i
+        sub_det = det(get_submatrix(matrix, i))
+        determinant += sign * matrix[0][i] * sub_det
+    
+    return determinant
+
+def get_submatrix(matrix, i):
+    return [row[0:i] + row[i+1:] for row in matrix[1:]]
+
+#Resuelco e imprimo el sistema de ecuaciones
+# Llamo a la función cramer con nuestra matriz y vector de solucione
+result = cramer(matrix, solutions)
+print(result)
+    #EL FIN
